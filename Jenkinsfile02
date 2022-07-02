@@ -24,8 +24,9 @@ stage('sendemailnotification'){
 Regards,
 Tajuddin''', cc: 'babatajuddin12@gmail.com', from: '', replyTo: '', subject: 'Build over', to: 'babatajuddin12@gmail.com'
 }
-*/
+
     }
     }
+    */
 }
     
