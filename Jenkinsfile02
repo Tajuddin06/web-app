@@ -10,11 +10,9 @@ node{
     stage('codecoveragereport'){
         sh "${mavenHome}/bin/mvn package sonar:sonar"
     }
-    /*
-    stage('artifactupload'){
+   stage('artifactupload'){
         sh "${mavenHome}/bin/mvn package deploy"
     }
-    */
     stage('tomcatdeploy'){
         sshagent(['1660b02a-e016-4711-b5a7-582f0761f9bd']) {
     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@52.91.78.209:/opt/tomcat/webapps/"
