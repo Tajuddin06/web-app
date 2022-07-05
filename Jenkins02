@@ -1,0 +1,34 @@
+node{
+ //echo "GitHub BranhName ${env.BRANCH_NAME}"
+  //echo "Jenkins Job Number ${env.BUILD_NUMBER}"
+  echo "Jenkins Node Name ${env.NODE_NAME}"
+  
+  echo "Jenkins Home ${env.JENKINS_HOME}"
+  echo "Jenkins URL ${env.JENKINS_URL}"
+  echo "JOB Name ${env.JOB_NAME}"
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), pipelineTriggers([pollSCM('* * * * *')])])
+    def mavenHome = tool name: "maven"
+    stage('pushcode'){
+    git branch: 'development', credentialsId: '2debd23e-daf8-4478-a1cf-dbede9ecf794', url: 'https://github.com/Tajuddin06/web-app.git'
+    }
+    stage('Build'){
+        sh "${mavenHome}/bin/mvn package"
+    }
+    /*
+    stage('codecoveragereport'){
+        sh "${mavenHome}/bin/mvn package sonar:sonar"
+    }
+   stage('artifactupload'){
+        sh "${mavenHome}/bin/mvn package deploy"
+    }
+    stage('tomcatdeploy'){
+        sshagent(['1660b02a-e016-4711-b5a7-582f0761f9bd']) {
+    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@52.91.78.209:/opt/tomcat/webapps/"
+    }
+    stage('sendemailnotification'){
+    mail bcc: '', body: '''Build Over
+    Regards,
+    Tajuddin''', cc: 'babatajuddin12@gmail.com', from: '', replyTo: '', subject: 'Build over', to: 'babatajuddin12@gmail.com'
+}
+*/
+}
