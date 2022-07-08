@@ -1,0 +1,30 @@
+node{
+    def mavenHome = tool name: "maven"
+    stage ('PushCode'){
+        git credentialsId: 'ae244b49-9606-4e00-ab21-e33bae27f05e', url: 'https://github.com/Tajuddin06/web-app.git'
+    }
+    stage ('Build'){
+        sh "${mavenHome}/bin/mvn package"
+    }
+    stage ('ExecuteSonarQubeReport'){
+        sh "${mavenHome}/bin/mvn package sonar:sonar"
+    }
+    /*
+    stage ('UploadArtifactsRepo'){
+        sh "${mavenHome}/bin/mvn package deploy"
+    }
+    */
+    stage ('DeployTomcatServer'){
+        sshagent(['f92f93a3-d29f-424d-a79b-d72eb2317cc9']) {
+        sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@34.229.16.248:/opt/tomcat/webapps/"
+}
+    }
+    stage ('Emai'){
+        mail bcc: '', body: '''build complete
+
+
+regards
+venkat ''', cc: 'babatajuddin12@gmail.com', from: '', replyTo: '', subject: 'build over..', to: 'babatajuddin12@gmail.com'
+    }
+}
+
